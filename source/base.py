@@ -14,8 +14,16 @@ def pipeline(file):
 
 df = pipeline(r'C:\Users\User\Documents\Bonfire\Homework\mogohw\student\student-por.csv')
 df
-s_list = list(set(df['school'].tolist()))
-grades = list((df["g1"] + df["g2"]+ df["g3"]))
-x = st.selectbox(label =" schools",options=s_list)
-y = st.selectbox(label = "grades", options=grades)
-st.bar_chart
+school_list = list(set(df['school'].tolist()))
+school = st.selectbox("Pick a school to query data from", placeholder= "Both Schools", options=["Both Schools"] + school_list)
+df2 = df
+if school != "Both Schools":
+    df2 = df2[df2['school'] == school]
+category_list = df2.columns.tolist()
+category_list.remove('school')
+# print(category_list)
+category = st.selectbox("Pick a category.", options=category_list)
+all_options = list(set(df2[category].tolist()))
+choice = st.selectbox("What parameter ", options= all_options)
+
+st.dataframe(pd.DataFrame(df2[df2[category] == choice]),hide_index=True)
